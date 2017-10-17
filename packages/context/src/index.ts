@@ -20,7 +20,7 @@ export {
 export {Binding, BindingScope, BindingType} from './binding';
 
 export {Context} from './context';
-export {ResolutionSession} from './resolution-session';
+export {ResolutionSession, ResolutionOptions} from './resolution-session';
 export {inject, Setter, Getter, Injection, InjectionMetadata} from './inject';
 export {Provider} from './provider';
 
