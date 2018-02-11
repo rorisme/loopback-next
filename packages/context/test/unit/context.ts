@@ -233,50 +233,54 @@ describe('Context', () => {
     });
   });
 
-  describe('bindOptions()', () => {
-    it('binds options for a binding before it is bound', () => {
-      const bindingForOptions = ctx.bindOptions('foo', {x: 1});
-      expect(bindingForOptions.key).to.equal(Binding.buildKeyForOptions('foo'));
+  describe('configure()', () => {
+    it('configures options for a binding before it is bound', () => {
+      const bindingForConfig = ctx.configure('foo').to({x: 1});
+      expect(bindingForConfig.key).to.equal(Binding.buildKeyForConfig('foo'));
+      expect(bindingForConfig.tags.has('config:foo')).to.be.true();
     });
 
-    it('binds options for a binding after it is bound', () => {
+    it('configures options for a binding after it is bound', () => {
       ctx.bind('foo').to('bar');
-      const bindingForOptions = ctx.bindOptions('foo').to({x: 1});
-      expect(bindingForOptions.key).to.equal(Binding.buildKeyForOptions('foo'));
+      const bindingForConfig = ctx.configure('foo').to({x: 1});
+      expect(bindingForConfig.key).to.equal(Binding.buildKeyForConfig('foo'));
+      expect(bindingForConfig.tags.has('config:foo')).to.be.true();
     });
   });
 
-  describe('getOptions()', () => {
-    it('gets options for a binding', async () => {
-      ctx.bindOptions('foo').toDynamicValue(() => Promise.resolve({x: 1}));
-      expect(await ctx.getOptions('foo')).to.eql({x: 1});
+  describe('getConfig()', () => {
+    it('gets config for a binding', async () => {
+      ctx.configure('foo').toDynamicValue(() => Promise.resolve({x: 1}));
+      expect(await ctx.getConfig('foo')).to.eql({x: 1});
     });
 
-    it('gets local options for a binding', async () => {
+    it('gets local config for a binding', async () => {
       ctx
-        .bindOptions('foo')
+        .configure('foo')
         .toDynamicValue(() => Promise.resolve({a: {x: 0, y: 0}}));
-      ctx.bindOptions('foo.a').toDynamicValue(() => Promise.resolve({x: 1}));
-      expect(await ctx.getOptions('foo.a', 'x', {localOnly: true})).to.eql(1);
+      ctx.configure('foo.a').toDynamicValue(() => Promise.resolve({x: 1}));
+      expect(await ctx.getConfig('foo.a', 'x', {localConfigOnly: true})).to.eql(
+        1,
+      );
       expect(
-        await ctx.getOptions('foo.a', 'y', {localOnly: true}),
+        await ctx.getConfig('foo.a', 'y', {localConfigOnly: true}),
       ).to.be.undefined();
     });
 
-    it('gets parent options for a binding', async () => {
+    it('gets parent config for a binding', async () => {
       ctx
-        .bindOptions('foo')
+        .configure('foo')
         .toDynamicValue(() => Promise.resolve({a: {x: 0, y: 0}}));
-      ctx.bindOptions('foo.a').toDynamicValue(() => Promise.resolve({x: 1}));
-      expect(await ctx.getOptions('foo.a', 'x')).to.eql(1);
-      expect(await ctx.getOptions('foo.a', 'y')).to.eql(0);
+      ctx.configure('foo.a').toDynamicValue(() => Promise.resolve({x: 1}));
+      expect(await ctx.getConfig('foo.a', 'x')).to.eql(1);
+      expect(await ctx.getConfig('foo.a', 'y')).to.eql(0);
     });
   });
 
-  describe('getOptionsSync()', () => {
-    it('gets options for a binding', () => {
-      ctx.bindOptions('foo').to({x: 1});
-      expect(ctx.getOptionsSync('foo')).to.eql({x: 1});
+  describe('getConfigSync()', () => {
+    it('gets config for a binding', () => {
+      ctx.configure('foo').to({x: 1});
+      expect(ctx.getConfigSync('foo')).to.eql({x: 1});
     });
   });
 
