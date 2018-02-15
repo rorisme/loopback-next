@@ -4,13 +4,16 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {expect, TestSandbox} from '@loopback/testlab';
-import {Application, CoreBindings} from '@loopback/core';
+import {Application} from '@loopback/core';
 import {ControllerBooter, ControllerDefaults} from '../../../index';
 import {resolve} from 'path';
 
 describe('controller booter unit tests', () => {
   const SANDBOX_PATH = resolve(__dirname, '../../../.sandbox');
   const sandbox = new TestSandbox(SANDBOX_PATH);
+
+  const CONTROLLERS_PREFIX = 'controllers';
+  const CONTROLLERS_TAG = 'controller';
 
   let app: Application;
 
@@ -37,8 +40,8 @@ describe('controller booter unit tests', () => {
 
   it('binds controllers during load phase', async () => {
     const expected = [
-      `${CoreBindings.CONTROLLERS_PREFIX}.ControllerOne`,
-      `${CoreBindings.CONTROLLERS_PREFIX}.ControllerTwo`,
+      `${CONTROLLERS_PREFIX}.ControllerOne`,
+      `${CONTROLLERS_PREFIX}.ControllerTwo`,
     ];
     await sandbox.copyFile(
       resolve(__dirname, '../../fixtures/multiple.artifact.js'),
@@ -50,7 +53,7 @@ describe('controller booter unit tests', () => {
     booterInst.discovered = [resolve(SANDBOX_PATH, 'multiple.artifact.js')];
     await booterInst.load();
 
-    const ctrls = app.findByTag(CoreBindings.CONTROLLERS_TAG);
+    const ctrls = app.findByTag(CONTROLLERS_TAG);
     const keys = ctrls.map(binding => binding.key);
     expect(keys).to.have.lengthOf(NUM_CLASSES);
     expect(keys.sort()).to.eql(expected.sort());
