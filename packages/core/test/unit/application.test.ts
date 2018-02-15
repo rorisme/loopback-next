@@ -4,16 +4,15 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {expect} from '@loopback/testlab';
-import {Application, Server, Component} from '../..';
+import {Application, Server, Component} from '../../index';
 import {Context, Constructor} from '@loopback/context';
 
 describe('Application', () => {
-  let app: Application;
-
-  beforeEach(givenApp);
-
   describe('controller binding', () => {
+    let app: Application;
     class MyController {}
+
+    beforeEach(givenApp);
 
     it('binds a controller', () => {
       const binding = app.controller(MyController);
@@ -28,13 +27,20 @@ describe('Application', () => {
       expect(binding.key).to.equal('controllers.my-controller');
       expect(findKeysByTag(app, 'controller')).to.containEql(binding.key);
     });
+
+    function givenApp() {
+      app = new Application();
+    }
   });
 
   describe('component binding', () => {
+    let app: Application;
     class MyController {}
     class MyComponent implements Component {
       controllers = [MyController];
     }
+
+    beforeEach(givenApp);
 
     it('binds a component', () => {
       app.component(MyComponent);
@@ -49,10 +55,15 @@ describe('Application', () => {
         'components.my-component',
       );
     });
+
+    function givenApp() {
+      app = new Application();
+    }
   });
 
   describe('server binding', () => {
     it('defaults to constructor name', async () => {
+      const app = new Application();
       const binding = app.server(FakeServer);
       expect(Array.from(binding.tags)).to.containEql('server');
       const result = await app.getServer(FakeServer.name);
@@ -60,6 +71,7 @@ describe('Application', () => {
     });
 
     it('allows custom name', async () => {
+      const app = new Application();
       const name = 'customName';
       app.server(FakeServer, name);
       const result = await app.getServer(name);
@@ -67,6 +79,7 @@ describe('Application', () => {
     });
 
     it('allows binding of multiple servers as an array', async () => {
+      const app = new Application();
       const bindings = app.servers([FakeServer, AnotherServer]);
       expect(Array.from(bindings[0].tags)).to.containEql('server');
       expect(Array.from(bindings[1].tags)).to.containEql('server');
@@ -79,6 +92,7 @@ describe('Application', () => {
 
   describe('start', () => {
     it('starts all injected servers', async () => {
+      const app = new Application();
       app.component(FakeComponent);
 
       await app.start();
@@ -89,6 +103,7 @@ describe('Application', () => {
     });
 
     it('does not attempt to start poorly named bindings', async () => {
+      const app = new Application();
       app.component(FakeComponent);
 
       // The app.start should not attempt to start this binding.
@@ -97,10 +112,6 @@ describe('Application', () => {
       await app.stop();
     });
   });
-
-  function givenApp() {
-    app = new Application();
-  }
 
   function findKeysByTag(ctx: Context, tag: string | RegExp) {
     return ctx.findByTag(tag).map(binding => binding.key);

@@ -28,10 +28,10 @@ export class Application extends Context {
   /**
    * Register a controller class with this application.
    *
-   * @param {Function} controllerCtor The controller class
-   * (constructor function)
+   * @param controllerCtor {Function} The controller class
+   * (constructor function).
    * @param {string=} name Optional controller name, default to the class name
-   * @returns {Binding} The newly created binding, you can use the reference to
+   * @return {Binding} The newly created binding, you can use the reference to
    * further modify the binding, e.g. lock the value to prevent further
    * modifications.
    *
@@ -43,9 +43,9 @@ export class Application extends Context {
    */
   controller(controllerCtor: ControllerClass, name?: string): Binding {
     name = name || controllerCtor.name;
-    return this.bind(`${CoreBindings.CONTROLLERS_PREFIX}.${name}`)
+    return this.bind(`controllers.${name}`)
       .toClass(controllerCtor)
-      .tag(CoreBindings.CONTROLLERS_TAG);
+      .tag('controller');
   }
 
   /**

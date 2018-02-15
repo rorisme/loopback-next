@@ -23,10 +23,6 @@ export namespace CoreBindings {
    */
   export const SERVERS = 'servers';
 
-  // Binding Constant prefixes / tags
-  export const CONTROLLERS_PREFIX = 'controllers';
-  export const CONTROLLERS_TAG = 'controller';
-
   // controller
   /**
    * Binding key for the controller class resolved in the current request
