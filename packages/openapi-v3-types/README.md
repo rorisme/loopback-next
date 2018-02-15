@@ -1,4 +1,4 @@
-# @loopback/openapi-spec
+# @loopback/openapi-v3-types
 
 TypeScript type definitions for OpenAPI Spec/Swagger documents.
 
@@ -6,8 +6,6 @@ TypeScript type definitions for OpenAPI Spec/Swagger documents.
 
 TypeScript definitions describing the schema of OpenAPI/Swagger documents,
 including LoopBack-specific extensions.
-
-_@jannyHou: will add more doc here to specify the version of types after we decide how to support new versions/keep old versions_
 
 ## Installation
 
@@ -34,6 +32,7 @@ when constructing a spec argument value.
 
 See https://www.openapis.org/ and [version 3.0.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)
 of OpenAPI Specification.
+For the types missing in this package, they are exported from https://www.npmjs.com/package/openapi3-ts
 
 ## Contributions
 

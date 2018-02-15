@@ -31,7 +31,6 @@
   "devDependencies": {
     "@loopback/build": "^4.0.0-alpha.13",
     "@loopback/openapi-spec-builder": "^4.0.0-alpha.22",
-    "@loopback/openapi-v3-types": "^4.0.0-alpha.1",
     "@loopback/testlab": "^4.0.0-alpha.24",
     "@types/passport": "^0.4.0",
     "@types/passport-http": "^0.3.3",

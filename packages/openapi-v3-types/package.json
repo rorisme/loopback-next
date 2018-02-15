@@ -1,7 +1,7 @@
 {
   "name": "@loopback/openapi-v3-types",
-  "version": "4.0.0-alpha.1",
-  "description": "TypeScript type definitions for OpenAPI Spec/Swagger documents.",
+  "version": "1.0.0-alpha.1",
+  "description": "TypeScript type definitions for OpenAPI Specifications.",
   "engines": {
     "node": ">=8"
   },

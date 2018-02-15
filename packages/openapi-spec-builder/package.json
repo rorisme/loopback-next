@@ -23,8 +23,7 @@
     "Testing"
   ],
   "dependencies": {
-    "@loopback/openapi-spec": "^4.0.0-alpha.25",
-    "@loopback/openapi-v3-types": "^4.0.0-alpha.1"
+    "@loopback/openapi-spec": "^4.0.0-alpha.25"
   },
   "devDependencies": {
     "@loopback/build": "^4.0.0-alpha.13"

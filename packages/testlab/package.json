@@ -18,7 +18,6 @@
   "license": "MIT",
   "dependencies": {
     "@loopback/openapi-spec": "^4.0.0-alpha.25",
-    "@loopback/openapi-v3-types": "^4.0.0-alpha.1",
     "@types/fs-extra": "^5.0.0",
     "@types/shot": "^3.4.0",
     "@types/sinon": "^4.1.3",

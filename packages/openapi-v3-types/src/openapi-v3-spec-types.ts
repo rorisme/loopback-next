@@ -23,7 +23,7 @@ export type ExtensionValue = any;
 
 /**
  * The location of a parameter.
- * Possible values are "query", "header", "path" or "body".
+ * Possible values are "query", "header", "path" or "cookie".
  * <p>Specification:
  * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
  * search "The location of the parameter"
@@ -65,7 +65,7 @@ export interface OAS3SchemaObject extends ISpecificationExtension {
   discriminator?: DiscriminatorObject;
   readOnly?: boolean;
   writeOnly?: boolean;
-  xml?: XmlObject;
+  xml?: XMLObject;
   externalDocs?: ExternalDocumentationObject;
   example?: ExtensionValue;
   examples?: ExtensionValue[];
@@ -157,8 +157,7 @@ export interface MediaTypeObject extends ISpecificationExtension {
  * its `ParameterObject`
  */
 export interface EncodingObject extends ISpecificationExtension {
-  // [property: string]: EncodingPropertyObject;
-  [property: string]: EncodingPropertyObject | ExtensionValue; // Hack for allowing ISpecificationExtension
+  [property: string]: EncodingPropertyObject | ExtensionValue;
 }
 
 /**
@@ -171,7 +170,7 @@ export interface EncodingPropertyObject {
   style?: string;
   explode?: boolean;
   allowReserved?: boolean;
-  [key: string]: ExtensionValue; // (any) = Hack for allowing ISpecificationExtension
+  [key: string]: ExtensionValue;
 }
 
 /**
@@ -212,7 +211,7 @@ export interface ExampleObject {
   description?: string;
   value?: ExtensionValue;
   externalValue?: string;
-  [property: string]: ExtensionValue; // Hack for allowing ISpecificationExtension
+  [property: string]: ExtensionValue;
 }
 
 export interface ReferenceObject {
@@ -232,7 +231,7 @@ export interface DiscriminatorObject {
  * Describes an encoding object, copied from 'openapi3-ts' due to overriding
  * its `SchemaObject`
  */
-export interface XmlObject extends ISpecificationExtension {
+export interface XMLObject extends ISpecificationExtension {
   name?: string;
   namespace?: string;
   prefix?: string;
@@ -249,10 +248,11 @@ export interface ExternalDocumentationObject extends ISpecificationExtension {
   url: string;
 }
 
-//  Specification Extensions
-//   ^x-
+/**
+ * Allow key(string) value extension specifications.
+ * Cannot constraint to "^x-" but can filter them later to access to them
+ */
 export interface ISpecificationExtension {
-  // Cannot constraint to "^x-" but can filter them later to access to them
   [extensionName: string]: ExtensionValue;
 }
 
@@ -279,8 +279,10 @@ export interface ScopesObject
   [name: string]: string;
 }
 
+// appreciate opinions:
+// Do we keep them for future features or add them when implement the feature? 
+// Copied from swagger 2 spec, don't find our code use it.
 /**
- * Copied from swagger 2 spec, don't find our code use it.
  * A declaration of the security schemes available to be used in the
  * specification. This does not enforce the security schemes on the operations
  * and only serves to provide the relevant details for each scheme.
@@ -294,8 +296,10 @@ export interface SecurityDefinitionsObject
   [name: string]: OAS3.SecuritySchemeObject;
 }
 
+// appreciate opinions:
+// Do we keep them for future features or add them when implement the feature? 
+// Copied from swagger 2 spec, don't find our code use it.
 /**
- * Copied from swagger 2 spec, don't find our code uses it.
  * An object to hold parameters to be reused across operations. Parameter
  * definitions can be referenced to the ones defined here.
  *
@@ -310,8 +314,10 @@ export interface ParametersDefinitionsObject
   [name: string]: OAS3.ParameterObject;
 }
 
+// appreciate opinions:
+// Do we keep them for future features or add them when implement the feature? 
+// Copied from swagger 2 spec, don't find our code use it.
 /**
- * Copied from swagger 2 spec, don't find our code uses it.
  * An object to hold responses to be reused across operations. Response
  * definitions can be referenced to the ones defined here.
  *
