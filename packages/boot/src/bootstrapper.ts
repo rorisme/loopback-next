@@ -16,7 +16,6 @@ import {BootBindings} from './keys';
 import {_bindBooter} from './boot.mixin';
 
 import * as debugModule from 'debug';
-
 const debug = debugModule('loopback:boot:bootstrapper');
 
 /**
@@ -27,6 +26,8 @@ const debug = debugModule('loopback:boot:bootstrapper');
  * it does not maintain any state of it's own.
  *
  * @param app Appliaction instance
+ * @param projectRoot The root directory of the project, relative to which all other paths are resolved
+ * @param [bootOptions] The BootOptions describing the conventions to be used by various Booters
  */
 export class Bootstrapper {
   constructor(
@@ -49,8 +50,6 @@ export class Bootstrapper {
    * are bound to the Application instance. Each phase of an instance must
    * complete before the next phase is started.
    *
-   * @param {BootOptions} bootOptions Options for boot. Bound for Booters to
-   * receive via Dependency Injection. This normally contains config for Booters.
    * @param {BootExecutionOptions} execOptions Execution options for boot. These
    * determine the phases and booters that are run.
    * @param {Context} [ctx] Optional Context to use to resolve bindings. This is
