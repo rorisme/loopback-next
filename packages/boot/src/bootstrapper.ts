@@ -3,18 +3,20 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
+import {resolve} from 'path';
 import {Context, inject, resolveList} from '@loopback/context';
+import {CoreBindings, Application} from '@loopback/core';
 import {
   BootOptions,
   BootExecutionOptions,
   BOOTER_PHASES,
-  CoreBindings,
-  Application,
-} from '@loopback/core';
-import {resolve} from 'path';
+  Bootable,
+} from './interfaces';
 import {BootBindings} from './keys';
+import {_bindBooter} from './boot.mixin';
 
 import * as debugModule from 'debug';
+
 const debug = debugModule('loopback:boot:bootstrapper');
 
 /**
@@ -28,8 +30,19 @@ const debug = debugModule('loopback:boot:bootstrapper');
  */
 export class Bootstrapper {
   constructor(
-    @inject(CoreBindings.APPLICATION_INSTANCE) private app: Application,
-  ) {}
+    @inject(CoreBindings.APPLICATION_INSTANCE)
+    private app: Application & Bootable,
+    @inject(BootBindings.PROJECT_ROOT) private projectRoot: string,
+    @inject(BootBindings.BOOT_OPTIONS) private bootOptions: BootOptions = {},
+  ) {
+    // Resolve path to projectRoot and re-bind
+    this.projectRoot = resolve(this.projectRoot);
+    app.bind(BootBindings.PROJECT_ROOT).to(this.projectRoot);
+
+    // This is re-bound for testing reasons where this value may be passed directly
+    // and needs to be propogated to the Booters via DI
+    app.bind(BootBindings.BOOT_OPTIONS).to(this.bootOptions);
+  }
 
   /**
    * Function is responsible for calling all registered Booter classes that
@@ -48,27 +61,19 @@ export class Bootstrapper {
    * may maintain state.
    */
   async boot(
-    bootOptions: BootOptions,
     execOptions?: BootExecutionOptions,
     ctx?: Context,
   ): Promise<Context> {
-    if (!bootOptions.projectRoot) {
-      throw new Error(
-        `No projectRoot provided for boot. Call boot({projectRoot: 'path'}) with projectRoot set.`,
-      );
-    }
-
     const bootCtx = ctx || new Context(this.app);
 
     // Bind booters passed in as a part of BootOptions
-    if (execOptions && execOptions.booters)
-      this.app.booter(execOptions.booters);
-
-    // Resolve path to projectRoot
-    bootOptions.projectRoot = resolve(bootOptions.projectRoot);
-
-    // Bind Boot Options for Booters
-    bootCtx.bind(BootBindings.BOOT_OPTIONS).to(bootOptions);
+    // We use _bindBooter so this Class can be used without the Mixin
+    if (execOptions && execOptions.booters) {
+      execOptions.booters.forEach(booter =>
+        // tslint:disable-next-line:no-any
+        _bindBooter(this.app, booter),
+      );
+    }
 
     // Determine the phases to be run. If a user set a phases filter, those
     // are selected otherwise we run the default phases (BOOTER_PHASES).
@@ -79,10 +84,10 @@ export class Bootstrapper {
       : BOOTER_PHASES;
 
     // Find booters registered to the BOOTERS_TAG by getting the bindings
-    const bindings = bootCtx.findByTag(CoreBindings.BOOTER_TAG);
+    const bindings = bootCtx.findByTag(BootBindings.BOOTER_TAG);
 
     // Prefix length. +1 because of `.` => 'booters.'
-    const prefix_length = CoreBindings.BOOTER_PREFIX.length + 1;
+    const prefix_length = BootBindings.BOOTER_PREFIX.length + 1;
 
     // Names of all registered booters.
     const defaultBooterNames = bindings.map(binding =>

@@ -18,7 +18,7 @@ describe('controller booter unit tests', () => {
   beforeEach(getApp);
 
   it(`constructor uses ControllerDefaults for 'options' if none are given`, () => {
-    const booterInst = new ControllerBooter({projectRoot: SANDBOX_PATH}, app);
+    const booterInst = new ControllerBooter(app, SANDBOX_PATH);
     expect(booterInst.options).to.deepEqual(ControllerDefaults);
   });
 
@@ -31,10 +31,7 @@ describe('controller booter unit tests', () => {
       nested: ControllerDefaults.nested,
     });
 
-    const booterInst = new ControllerBooter(
-      {projectRoot: SANDBOX_PATH, controllers: options},
-      app,
-    );
+    const booterInst = new ControllerBooter(app, SANDBOX_PATH, options);
     expect(booterInst.options).to.deepEqual(expected);
   });
 
@@ -46,7 +43,7 @@ describe('controller booter unit tests', () => {
     await sandbox.copyFile(
       resolve(__dirname, '../../fixtures/multiple.artifact.js'),
     );
-    const booterInst = new ControllerBooter({projectRoot: SANDBOX_PATH}, app);
+    const booterInst = new ControllerBooter(app, SANDBOX_PATH);
     const NUM_CLASSES = 2; // 2 classes in above file.
 
     // Load uses discovered property
