@@ -280,7 +280,7 @@ export interface ScopesObject
 }
 
 // appreciate opinions:
-// Do we keep them for future features or add them when implement the feature? 
+// Do we keep them for future features or add them when implement the feature?
 // Copied from swagger 2 spec, don't find our code use it.
 /**
  * A declaration of the security schemes available to be used in the
@@ -297,7 +297,7 @@ export interface SecurityDefinitionsObject
 }
 
 // appreciate opinions:
-// Do we keep them for future features or add them when implement the feature? 
+// Do we keep them for future features or add them when implement the feature?
 // Copied from swagger 2 spec, don't find our code use it.
 /**
  * An object to hold parameters to be reused across operations. Parameter
@@ -315,7 +315,7 @@ export interface ParametersDefinitionsObject
 }
 
 // appreciate opinions:
-// Do we keep them for future features or add them when implement the feature? 
+// Do we keep them for future features or add them when implement the feature?
 // Copied from swagger 2 spec, don't find our code use it.
 /**
  * An object to hold responses to be reused across operations. Response
