@@ -4,4 +4,4 @@
 // License text available at https://opensource.org/licenses/MIT
 
 export * from './openapi-v3-spec-types';
-export * from './openapi-v3-type-guard';
+export * from './type-guards';
